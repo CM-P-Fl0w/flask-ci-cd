@@ -29,13 +29,14 @@ jobs:
         run: pytest
         continue-on-error: true
 
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
       - name: Build Docker Image
-        run: docker build -t your-dockerhub-username/flask-ci-cd:latest .
+        run: docker build -t cmpfl0w/flask-ci-cd:latest .
 
       - name: Push Docker Image to DockerHub
-        run: |
-          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-          docker push your-dockerhub-username/flask-ci-cd:latest
+        run: docker push cmpfl0w/flask-ci-cd:latest
 
       - name: Deploy to Kubernetes
         run: kubectl apply -f k8s-deployment.yaml
