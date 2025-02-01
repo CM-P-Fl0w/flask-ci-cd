@@ -22,6 +22,8 @@ jobs:
 
       - name: Install dependencies
         run: |
+          python -m venv venv
+          source venv/bin/activate
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
@@ -37,6 +39,11 @@ jobs:
 
       - name: Push Docker Image to DockerHub
         run: docker push cmpfl0w/flask-ci-cd:latest
+
+      - name: Set up Minikube
+        run: |
+          minikube start
+          kubectl cluster-info
 
       - name: Deploy to Kubernetes
         run: kubectl apply -f k8s-deployment.yaml
